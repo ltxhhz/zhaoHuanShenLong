@@ -795,7 +795,7 @@ window.__require = function e(t, a, i) {
             var i = cc.instantiate(this.enemyPreArr[a]);
             this.changeSize(i)
             i.typeID = a + 1;
-            console.log('创建敌人', i.typeID)
+            // console.log('创建敌人', i.typeID)
             var o = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio;
             if (ltOpt.godView.enable) {
               this.CameraChangeZoomRatio(o, 0.2)
@@ -824,7 +824,7 @@ window.__require = function e(t, a, i) {
               if (a > (ltOpt.change ? ltOpt.enemyNum * 0.66 : 39)) return
             } else if (playerLevel1 > 7 && a > (ltOpt.change ? ltOpt.enemyNum * (1 / 3) : 20)) return;
             for (var o = 0; o < e; o++) {
-              console.log('创建单个敌人', `玩家等级 ${playerLevel1}, 敌人数 ${a}, 增加 ${e}`);
+              // console.log('创建单个敌人', `玩家等级 ${playerLevel1}, 敌人数 ${a}, 增加 ${e}`);
               var n = this.getEnemyID(playerLevel)
               if (ltOpt.safeMode) {
                 n = playerLevel - 1
@@ -839,7 +839,6 @@ window.__require = function e(t, a, i) {
               s.speed = (200 - 10 * s.typeID) / c;
               var r = this.getEnemyPos(s);
               if (r) {
-                console.log('add');
                 this.enemyNode.addChild(s, 1)
                 s.setPosition(r)
                 s.getComponent("enemyJS").active = true
@@ -934,7 +933,6 @@ window.__require = function e(t, a, i) {
         ChangeBig: function () {
           if (!this.gameOverFlags) {
             var e = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio;
-            console.log('ChangeBig');
             this.speedNum += this.addSpeed / e;
             var t = this.playerNode.typeID;
             this.removeSmallFish222()
@@ -2004,7 +2002,7 @@ window.__require = function e(t, a, i) {
       cc._RF.push(t, "f0150VbHHtN2qKswCMoDllB", "audioTools");
       var a = {
         bgAudio: null,
-        isPlayAudio: true,
+        isPlayAudio: false,
         isPlayBG: true,
         playBG: function (e, t) {
           void 0 === t && (t = .3), this.isPlayBG && this.isPlayAudio && (this.stopBG(), null != ToolsJs.AudioClipDic[e] ? this.bgAudio = cc.audioEngine.play(ToolsJs.AudioClipDic[e], true, t) : this.bgAudio = cc.audioEngine.play(cc.url.raw("resources/music/" + e + ".mp3"), true, t))
@@ -2013,7 +2011,15 @@ window.__require = function e(t, a, i) {
           this.stopAudio(this.bgAudio)
         },
         playAudio: function (e, t, a) {
-          if (void 0 === t && (t = .5), void 0 === a && (a = false), this.isPlayAudio) return null != ToolsJs.AudioClipDic[e] ? cc.audioEngine.play(ToolsJs.AudioClipDic[e], a, t) : cc.audioEngine.play(cc.url.raw("resources/music/" + e + ".mp3"), a, t)
+          if (0 === t) t = .5
+          if (0 === a) a = false
+          if (this.isPlayAudio) {
+            if (null != ToolsJs.AudioClipDic[e]) {
+              return cc.audioEngine.play(ToolsJs.AudioClipDic[e], a, t)
+            } else {
+              cc.audioEngine.play(cc.url.raw("resources/music/" + e + ".mp3"), a, t)
+            }
+          }
         },
         stopAudio: function (e) {
           null != e && (cc.audioEngine.stop(e), e = null)
