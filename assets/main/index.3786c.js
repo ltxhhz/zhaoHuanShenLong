@@ -819,9 +819,9 @@ window.__require = function e(t, a, i) {
             if (playerLevel1 <= 3) {
               if (a > (ltOpt.change ? ltOpt.enemyNum : 60)) return
             } else if (playerLevel1 >= 4 && playerLevel1 <= 5) {
-              if (a > (ltOpt.change ? ltOpt.enemyNum * 0.83 : 50)) return
+              if (a > (ltOpt.change ? ltOpt.enemyNum * 0.83 : 49)) return
             } else if (playerLevel1 > 5 && playerLevel1 <= 7) {
-              if (a > (ltOpt.change ? ltOpt.enemyNum * 0.66 : 40)) return
+              if (a > (ltOpt.change ? ltOpt.enemyNum * 0.66 : 39)) return
             } else if (playerLevel1 > 7 && a > (ltOpt.change ? ltOpt.enemyNum * (1 / 3) : 20)) return;
             for (var o = 0; o < e; o++) {
               console.log('创建单个敌人', `玩家等级 ${playerLevel1}, 敌人数 ${a}, 增加 ${e}`);
@@ -1118,9 +1118,21 @@ window.__require = function e(t, a, i) {
         },
         removeSomeBigFish: function () {
           if (!this.gameOverFlags) {
-            for (var e = this.enemyNode.convertToNodeSpaceAR(this.node.convertToWorldSpaceAR(this.playerNode.position)), t = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio, a = [], i = 0; i < this.enemyNode.children.length; i++) this.enemyNode.children[i].typeID >= this.playerNode.typeID + 3 && a.push(this.enemyNode.children[i]);
+            var e = this.enemyNode.convertToNodeSpaceAR(this.node.convertToWorldSpaceAR(this.playerNode.position)),
+              t = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio,
+              a = []
+            for (var i = 0; i < this.enemyNode.children.length; i++) {
+              if (this.enemyNode.children[i].typeID >= this.playerNode.typeID + 3) {
+                a.push(this.enemyNode.children[i]);
+              }
+            }
             for (var o = 0; o < a.length; o++)
-              if (s.pDistance(e, a[o].position) > (this.gameHeight / 2 + a[o].height / 2) / t) return 8 == a[o].typeID && this.jingyuNum--, 9 == a[o].typeID && this.jiaoNum--, void this.enemyNode.removeChild(a[o])
+              if (s.pDistance(e, a[o].position) > (this.gameHeight / 2 + a[o].height / 2) / t) {
+                8 == a[o].typeID && this.jingyuNum--
+                9 == a[o].typeID && this.jiaoNum--
+                this.enemyNode.removeChild(a[o])
+                return
+              }
           }
         },
         removeSmallFish222: function () {
@@ -1130,29 +1142,50 @@ window.__require = function e(t, a, i) {
               a = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio,
               i = [];
             if (!(this.playerNode.typeID >= 5)) {
-              for (var o = 0; o < this.enemyNode.children.length; o++) this.enemyNode.children[o].typeID <= this.playerNode.typeID - 3 && i.push(this.enemyNode.children[o]);
-              if (i.length > 0)
-                for (var n = function (o) {
-                    var n = i[o];
-                    n.runAction(cc.sequence(cc.delayTime(.05 * o), cc.callFunc(function (e) {
-                      if (s.pDistance(t, e.position) > (this.gameHeight + n.height / 2) / a && Math.random() < .5) {
-                        if (this.gameOverFlags) return;
-                        this.enemyNode.removeChild(n), this.CreateSingleEnemy(1, this.playerNode.typeID)
-                      }
-                    }, e)))
-                  }, c = 0; c < i.length; c++) n(c)
+              for (var o = 0; o < this.enemyNode.children.length; o++) {
+                if (this.enemyNode.children[o].typeID <= this.playerNode.typeID - 3) {
+                  i.push(this.enemyNode.children[o]);
+                }
+              }
+              if (i.length > 0) {
+                var n = function (o) {
+                  var n = i[o];
+                  n.runAction(cc.sequence(cc.delayTime(.05 * o), cc.callFunc(function (e) {
+                    if (s.pDistance(t, e.position) > (this.gameHeight + n.height / 2) / a && Math.random() < .5) {
+                      if (this.gameOverFlags) return;
+                      if (ltOpt.safeMode) return
+                      this.enemyNode.removeChild(n)
+                      this.CreateSingleEnemy(1, this.playerNode.typeID)
+                    }
+                  }, e)))
+                }
+                for (var c = 0; c < i.length; c++) n(c)
+              }
             }
           }
         },
         removeSmallFish: function () {
           if (!this.gameOverFlags) {
-            for (var e = this.enemyNode.convertToNodeSpaceAR(this.node.convertToWorldSpaceAR(this.playerNode.position)), t = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio, a = [], i = 0; i < this.enemyNode.children.length; i++) {
+            var e = this.enemyNode.convertToNodeSpaceAR(this.node.convertToWorldSpaceAR(this.playerNode.position)),
+              t = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio,
+              a = []
+            for (var i = 0; i < this.enemyNode.children.length; i++) {
               var o = this.enemyNode.children[i].typeID;
-              this.playerNode.typeID >= 4 && o == this.playerNode.typeID && a.push(this.enemyNode.children[i])
+              if (this.playerNode.typeID >= 4 && o == this.playerNode.typeID) {
+                a.push(this.enemyNode.children[i])
+              }
             }
-            if (a.length > 0)
-              for (var n = 0; n < a.length; n++)
-                if (s.pDistance(e, a[n].position) > (this.gameHeight / 2 + a[n].height / 2) / t) return Math.random(), this.enemyNode.removeChild(a[n]), void this.CreateSingleEnemy(1, this.playerNode.typeID)
+            if (a.length > 0) {
+              for (var n = 0; n < a.length; n++) {
+                if (s.pDistance(e, a[n].position) > (this.gameHeight / 2 + a[n].height / 2) / t) {
+                  // Math.random()
+                  if (ltOpt.safeMode) return
+                  this.enemyNode.removeChild(a[n])
+                  this.CreateSingleEnemy(1, this.playerNode.typeID)
+                  return
+                }
+              }
+            }
           }
         },
         createLizi: function (e, t) {

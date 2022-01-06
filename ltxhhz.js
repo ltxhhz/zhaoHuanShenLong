@@ -14,7 +14,7 @@ let tools = document.getElementById('lt-tools'),
   start = document.getElementById('start'),
   normalSpeed = document.getElementById('normal-speed'),
   godView = document.getElementById('god-view'),
-  // safeMode = document.getElementById('safe-mode'),
+  safeMode = document.getElementById('safe-mode'),
   changeInit = document.getElementById('change-init')
 let tadpole = document.getElementsByName('tadpole')[0],
   frog = document.getElementsByName('frog')[0],
@@ -47,7 +47,7 @@ Object.defineProperty(ltOpt, 'ready', {
       start.disabled = false
       godView.disabled = false
       changeInit.disabled = false
-      // safeMode.disabled = false
+      safeMode.disabled = false
     }
   }
 })
@@ -69,8 +69,8 @@ godView.onclick = function (e) {
   ltOpt.godView.enable = true
   noAdGoToScene()
 }
-// safeMode.onclick = function (e) {
-//   tools.style.display = 'none'
-//   ltOpt.safeMode = true
-//   noAdGoToScene()
-// }
+safeMode.onclick = function (e) {
+  tools.style.display = 'none'
+  ltOpt.safeMode = true
+  noAdGoToScene()
+}
