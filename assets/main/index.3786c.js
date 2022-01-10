@@ -476,9 +476,45 @@ window.__require = function e(t, a, i) {
           2 == this.platFromNum || 3 == this.platFromNum ? (e.fitWidth = true, e.fitHeight = true) : (e.fitWidth = true, e.fitHeight = false)
         },
         onLoad: function () {
-          a.publicGameBool ? o.init() : finishLoad(), this.platFromNum = 1, this.judgeCurPlatform(), this.adapterScreen(), this.gameOveEndBool = false, this.gameOverNum = 0, this.gameWidth = cc.winSize.width, this.gameHeight = cc.winSize.height, a.curType = this.returnCurrentLanType(), a.playNum >= 1 && (this.startBgNode.active = false), a.playNum++, cc.log(a.playNum), this.addTouchEvents(), i.loadingLayer("panel/LinkIconSpr"), cc.director.getCollisionManager().enabled = true, cc.director.getCollisionManager().enabledDebugDraw = true, this.touchBeginFlags = true, this.Hscale = 1280 / this.gameHeight, this.Wscale = 720 / this.gameWidth, this.SizeScale = 0, this.Hscale >= this.Wscale ? this.SizeScale = this.Wscale : this.SizeScale = this.Hscale, a.publicGameBool || this.play(), this.canCreateDisX = 0, this.canCreateDisY = 0, this.OffPos = null, this.speedNum = 400 / this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio, this.speed = this.speedNum, this.BGNum = 9, this.kedouArr = [], this.qingwaArr = [], this.haiguiArr = [], this.xiaojinyuArr = [], this.jinliArr = [], this.dianmanArr = [], this.shayuArr = [], this.jingyuArr = [], this.jiaoArr = [], this.longArr = [], this.tempArr = [], this.BGArr = [], this.fishScaleX = [], this.fishScaleY = [], this.myFish = null, this.lightFlags = false, this.boolFlags = false, this.gameOverFlags = false, this.canMoveFlags = true, this.firstFlags = true, this.BGNode = cc.find("Canvas/bgLayer"), this.scale = .4 * this.SizeScale;
+          a.publicGameBool ? o.init() : finishLoad()
+          this.platFromNum = 1
+          this.judgeCurPlatform()
+          this.adapterScreen()
+          this.gameOveEndBool = false
+          this.gameOverNum = 0
+          this.gameWidth = cc.winSize.width
+          this.gameHeight = cc.winSize.height
+          a.curType = this.returnCurrentLanType()
+          a.playNum >= 1 && (this.startBgNode.active = false)
+          a.playNum++
+          cc.log(a.playNum)
+          this.addTouchEvents()
+          i.loadingLayer("panel/LinkIconSpr")
+          cc.director.getCollisionManager().enabled = true
+          cc.director.getCollisionManager().enabledDebugDraw = true
+          this.touchBeginFlags = true
+          this.Hscale = 1280 / this.gameHeight
+          this.Wscale = 720 / this.gameWidth
+          this.SizeScale = 0
+          if (this.Hscale >= this.Wscale) {
+            this.SizeScale = this.Wscale
+          } else {
+            this.SizeScale = this.Hscale
+          }
+          if (!a.publicGameBool) {
+            this.play()
+          }
+          this.canCreateDisX = 0
+          this.canCreateDisY = 0
+          this.OffPos = null
+          this.speedNum = 400 / this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio
+          this.speed = this.speedNum
+          this.BGNum = 9
+          this.kedouArr = [], this.qingwaArr = [], this.haiguiArr = [], this.xiaojinyuArr = [], this.jinliArr = [], this.dianmanArr = [], this.shayuArr = [], this.jingyuArr = [], this.jiaoArr = [], this.longArr = [], this.tempArr = [], this.BGArr = [], this.fishScaleX = [], this.fishScaleY = [], this.myFish = null, this.lightFlags = false, this.boolFlags = false, this.gameOverFlags = false, this.canMoveFlags = true, this.firstFlags = true
+          this.BGNode = cc.find("Canvas/bgLayer")
+          this.scale = .4 * this.SizeScale;
           for (var e = 0; e < this.playerNode.children.length - 1; e++) this.changeSize(this.playerNode.children[e]);
-          this.playerNode.typeID = 1 //初始等级
+          this.playerNode.typeID = ltOpt.initMyself.enable ? ltOpt.initMyself.level : 1 //初始等级
           this.createMap()
           this.maxCameraMovePosX = Math.abs(this.BGArr[0][this.BGNum - 1].x) - this.gameWidth
           this.maxCameraMovePosY = Math.abs(this.BGArr[0][this.BGNum - 1].y) - this.gameHeight / 2;
@@ -505,6 +541,7 @@ window.__require = function e(t, a, i) {
             this.fishScaleY.push(l)
           }
           this.jingyuNum = 0, this.jiaoNum = 0, this.Wu = cc.find("Canvas/Wu"), this.light1 = cc.find("Canvas/light1"), this.light2 = cc.find("Canvas/light2"), this.Wu.width = this.gameWidth, this.Wu.height = this.gameHeight, this.stoneNode.zIndex = 50, this.Wu.setPosition(cc.v2(0, 0)), this.Wu.zIndex = 1e3, this.light1.zIndex = 1200, this.light2.zIndex = 1300, this.LightNumCount = 0, this.lightjudeTime = 0, this.playerNode.zIndex = 9999, this.leafNode.zIndex = 1e4
+          if (ltOpt.initMyself.enable) this.ChangeBig()
         },
         start: function () {},
         play: function () {
@@ -933,8 +970,13 @@ window.__require = function e(t, a, i) {
         ChangeBig: function () {
           if (!this.gameOverFlags) {
             var e = this.carmeraNode.getChildByName("MoveCamera").getComponent(cc.Camera).zoomRatio;
-            this.speedNum += this.addSpeed / e;
             var t = this.playerNode.typeID;
+            if (ltOpt.initMyself.enable && !ltOpt.initMyself.init) {
+              for (let i = 0; i < t-1; i++) {
+                this.speedNum += this.addSpeed / ltOpt.normalCameraZoom[i];
+              }
+              ltOpt.initMyself.init = true
+            } else this.speedNum += this.addSpeed / e;
             this.removeSmallFish222()
             if (2 == t) {
               this.playerNode.getChildByName("kedou").active = false
@@ -1590,12 +1632,15 @@ window.__require = function e(t, a, i) {
             this.ajaxLoad(this.subScoreHttp, "gameScore=" + e + "&gameId=" + this.gameHttpId + "&gameType=" + t, this.scoreResult)
           },
           gamePV_load: function () {
-            this.ajaxLoad(this.gamePvHttp, "gameId=" + this.gameHttpId, this.ajaxOnLogoResult)
+            // this.ajaxLoad(this.gamePvHttp, "gameId=" + this.gameHttpId, this.ajaxOnLogoResult)
           },
           ajaxOnLogoResult: function () {},
           ajaxLoad: function (e, t, a) {
             var i = cc.loader.getXMLHttpRequest();
-            i.onreadystatechange = a, i.open("POST", e), i.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"), i.send(t)
+            i.onreadystatechange = a
+            i.open("POST", e)
+            i.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+            i.send(t)
           },
           scoreResult: function (e) {
             if (null != e.currentTarget.response && "" != e.currentTarget.response) {

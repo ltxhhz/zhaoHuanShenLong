@@ -6,6 +6,11 @@ var ltOpt = {
     enable: false,
     normalSpeed: false
   },
+  initMyself: {
+    enable: false,
+    level: 0,
+    init:false
+  },
   safeMode: false,
   normalCameraZoom: [1, 1, .75, .65, .55, .45, .4, .3, .25],
   ready: false
@@ -15,16 +20,21 @@ let tools = document.getElementById('lt-tools'),
   normalSpeed = document.getElementById('normal-speed'),
   godView = document.getElementById('god-view'),
   safeMode = document.getElementById('safe-mode'),
-  changeInit = document.getElementById('change-init')
+  changeInit = document.getElementById('change-init'),
+  changeMyself = document.getElementById('change-myself')
 let tadpole = document.getElementsByName('tadpole')[0],
   frog = document.getElementsByName('frog')[0],
   turtle = document.getElementsByName('turtle')[0]
 tadpole.value = ltOpt.initScale[0]
 frog.value = ltOpt.initScale[1]
 turtle.value = ltOpt.initScale[2]
+let level = document.getElementsByName('level')[0]
+level.onchange = function (e) {
+  ltOpt.initMyself.level = +this.value
+}
 tadpole.onchange = frog.onchange = turtle.onchange = function (e) {
-  console.log(this.name,this.value);
-  var value=Number(this.value)
+  console.log(this.name, this.value);
+  var value = Number(this.value)
   switch (this.name) {
     case 'tadpole':
       ltOpt.initScale[0] = value
@@ -44,10 +54,11 @@ tadpole.onchange = frog.onchange = turtle.onchange = function (e) {
 Object.defineProperty(ltOpt, 'ready', {
   set(v) {
     if (v == true) {
-      start.disabled = false
-      godView.disabled = false
-      changeInit.disabled = false
-      safeMode.disabled = false
+      start.disabled =
+        godView.disabled =
+        changeInit.disabled =
+        safeMode.disabled =
+        changeMyself.disabled = false
     }
   }
 })
@@ -59,7 +70,7 @@ start.onclick = function (e) {
 normalSpeed.onchange = function (e) {
   ltOpt.godView.normalSpeed = this.value
 }
-changeInit.onclick=function (e){
+changeInit.onclick = function (e) {
   tools.style.display = 'none'
   ltOpt.change = true
   noAdGoToScene()
@@ -72,5 +83,10 @@ godView.onclick = function (e) {
 safeMode.onclick = function (e) {
   tools.style.display = 'none'
   ltOpt.safeMode = true
+  noAdGoToScene()
+}
+changeMyself.onclick = function (e) {
+  tools.style.display = 'none'
+  ltOpt.initMyself.enable = true
   noAdGoToScene()
 }

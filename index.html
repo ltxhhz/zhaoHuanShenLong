@@ -33,8 +33,7 @@
   <!--<meta name="browsermode" content="application">-->
   <meta name="x5-page-mode" content="app">
   <link rel="stylesheet" type="text/css" href="./style-mobile.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic@6.5.5/picnic.min.css"
-    integrity="sha256-CBnbiPQogodXMdZxPaWpmf+JdiMIky+FP31RLT0L9h4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="./picnic@6.5.5.min.css">
   <style>
     #lt-tools {
       width: 90vw;
@@ -91,6 +90,24 @@
   </div>
   <div id="lt-tools">
     <button id="start" disabled>原汁原味</button>
+    <fieldset>
+      <legend>选择出身</legend>
+      <div>选择你的身份！</div>
+      <div class="flex">
+        <select name="level">
+          <option value="1">蝌蚪</option>
+          <option value="2">青蛙</option>
+          <option value="3">乌龟</option>
+          <option value="4">金鱼</option>
+          <option value="5">鲤鱼</option>
+          <option value="6">电鳗</option>
+          <option value="7">鲨鱼</option>
+          <option value="8">鲸</option>
+          <option value="9">蛟</option>
+        </select>
+      </div>
+      <button id="change-myself" disabled>启动</button>
+    </fieldset>
     <fieldset>
       <legend>自定义初始敌人</legend>
       <div>确定初始敌人的组成比例，总合需要等于1</div>
