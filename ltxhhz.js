@@ -8,7 +8,7 @@ var ltOpt = {
   },
   initMyself: {
     enable: false,
-    level: 0,
+    level: 1,
     init:false
   },
   safeMode: false,
